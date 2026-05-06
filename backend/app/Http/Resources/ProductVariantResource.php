@@ -12,9 +12,9 @@ class ProductVariantResource extends JsonResource
             'id'        => $this->id,
             'size'      => $this->size,
             'price'     => $this->price,
-            'stock_qty' => $this->stock_qty,
+            'stock_qty' => $this->stock,   
             'sku'       => $this->sku,
-            'in_stock'  => $this->stock_qty > 0,
+            'in_stock'  => $this->stock > 0, 
             'is_active' => $this->is_active,
         ];
     }

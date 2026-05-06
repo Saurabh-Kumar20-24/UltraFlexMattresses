@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
@@ -34,4 +35,12 @@ Route::prefix('products')->group(function () {
     Route::get('/featured',            [ProductController::class, 'featured']);
     Route::get('/{slug}',              [ProductController::class, 'show']);
     Route::get('/{slug}/related',      [ProductController::class, 'related']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/cart',        [CartController::class, 'index']);
+    Route::post('/cart',       [CartController::class, 'store']);
+    Route::patch('/cart/{id}', [CartController::class, 'update']);
+    Route::delete('/cart',     [CartController::class, 'clear']);
+    Route::delete('/cart/{id}',[CartController::class, 'destroy']);
 });
