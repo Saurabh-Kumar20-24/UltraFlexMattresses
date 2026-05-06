@@ -34,7 +34,17 @@ class Category extends Model
         });
     }
 
-    // public function products(){
-    //     return $this->hasMany(Product::class);
-    // }
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order');
+    }
 }

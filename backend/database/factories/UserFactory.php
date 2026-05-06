@@ -27,10 +27,40 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
+            'role'              => 'customer',
+            'phone'=>'9'.fake()->numerify('########'),
+            'city' => fake()->randomElement([
+                'Jaipur',
+                'Delhi',
+                'Gurugram',
+                'Chandigarh',
+                'Ludhiana',
+                'Jodhpur'
+            ]),
+            'state' => fake()->randomElement([
+                'Rajasthan',
+                'Delhi',
+                'Haryana',
+                'Punjab'
+            ]),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
+    }
+
+    public function admin() : static {
+       return $this->state(fn ()=>[
+          'name' => 'Ultra Flex Admin',
+          'email' => 'admin@ultraflexmattresses.com',
+          'role' => 'admin'
+       ]);
+    }
+
+    public function customer(): static {
+        return $this->state(fn ()=> [
+            'role' => 'customer',
+        ]);
     }
 
     /**
@@ -38,7 +68,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }

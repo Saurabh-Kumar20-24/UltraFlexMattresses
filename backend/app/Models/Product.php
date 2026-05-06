@@ -47,7 +47,7 @@ class Product extends Model
 
     public function images()
     {
-        return $this->hasMany(ProjectImage::class)->orderBy('sort_order');
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order');
     }
 
     public function reviews()
@@ -72,5 +72,15 @@ class Product extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
     }
 }
