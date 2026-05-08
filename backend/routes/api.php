@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,5 +44,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cart',       [CartController::class, 'store']);
     Route::patch('/cart/{id}', [CartController::class, 'update']);
     Route::delete('/cart',     [CartController::class, 'clear']);
-    Route::delete('/cart/{id}',[CartController::class, 'destroy']);
+    Route::delete('/cart/{id}', [CartController::class, 'destroy']);
+
+    Route::get('/orders',                          [OrderController::class, 'index']);
+    Route::post('/orders',                         [OrderController::class, 'store']);
+    Route::get('/orders/{orderNumber}',            [OrderController::class, 'show']);
+    Route::post('/orders/{orderNumber}/cancel',    [OrderController::class, 'cancel']);
+
+    Route::get('/account',           [AccountController::class, 'show']);
+    Route::put('/account',           [AccountController::class, 'update']);
+    Route::put('/account/password',  [AccountController::class, 'changePassword']);
+    Route::delete('/account',        [AccountController::class, 'destroy']);
 });
