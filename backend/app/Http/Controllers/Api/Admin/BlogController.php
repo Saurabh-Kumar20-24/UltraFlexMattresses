@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
-    // GET /api/admin/blogs
     public function index(Request $request): JsonResponse
     {
         $query = Blog::with('author')->latest();
@@ -40,7 +39,6 @@ class BlogController extends Controller
         ]);
     }
 
-    // POST /api/admin/blogs
     public function store(Request $request): JsonResponse
     {
         $request->validate([
@@ -86,7 +84,6 @@ class BlogController extends Controller
         ], 201);
     }
 
-    // PUT /api/admin/blogs/{id}
     public function update(Request $request, int $id): JsonResponse
     {
         $blog = Blog::findOrFail($id);
@@ -116,7 +113,6 @@ class BlogController extends Controller
             'published_at'     => $request->published_at,
         ];
 
-        // Handle cover image update
         if ($request->hasFile('cover_image')) {
             if ($blog->cover_image) {
                 Storage::disk('public')->delete($blog->cover_image);
@@ -134,7 +130,6 @@ class BlogController extends Controller
         ]);
     }
 
-    // DELETE /api/admin/blogs/{id}
     public function destroy(int $id): JsonResponse
     {
         $blog = Blog::findOrFail($id);

@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 
 class PreferenceController extends Controller
 {
-    // Save preferences
-    // POST /api/preferences
+
     public function store(Request $request): JsonResponse
     {
         $request->validate([
@@ -22,7 +21,6 @@ class PreferenceController extends Controller
 
         $user = $request->user(); // null if guest
 
-        // Find existing preference or create new
         $preference = UserPreference::updateOrCreate(
             [
                 'user_id'    => $user?->id,
@@ -43,14 +41,12 @@ class PreferenceController extends Controller
         ]);
     }
 
-    // Get personalized products based on preferences
-    // GET /api/preferences/recommendations
+
     public function recommendations(Request $request): JsonResponse
     {
         $user      = $request->user();
         $sessionId = $request->header('X-Session-ID');
 
-        // Find preference
         $preference = null;
 
         if ($user) {
@@ -61,7 +57,6 @@ class PreferenceController extends Controller
             $preference = UserPreference::where('session_id', $sessionId)->first();
         }
 
-        // No preference found — return featured products
         if (!$preference || !$preference->modal_completed) {
             $products = \App\Models\Product::with(['category', 'variants', 'images'])
                                            ->where('is_active', true)
@@ -76,11 +71,9 @@ class PreferenceController extends Controller
             ]);
         }
 
-        // Build personalized query
         $query = \App\Models\Product::with(['category', 'variants', 'images'])
                                     ->where('is_active', true);
 
-        // Filter by sleep concern → category
         if ($preference->sleep_concern === 'back_pain') {
             $query->whereHas('category', fn($q) =>
                 $q->whereIn('slug', ['orthopedic-range', 'mattresses'])
@@ -98,7 +91,6 @@ class PreferenceController extends Controller
             );
         }
 
-        // Filter by budget → variant price range
         $budgetMap = [
             'under_10k' => [0,     10000],
             '10k_25k'   => [10000, 25000],
@@ -114,7 +106,6 @@ class PreferenceController extends Controller
 
         $products = $query->take(8)->get();
 
-        // If no products match — fallback to featured
         if ($products->isEmpty()) {
             $products = \App\Models\Product::with(['category', 'variants', 'images'])
                                            ->where('is_active', true)

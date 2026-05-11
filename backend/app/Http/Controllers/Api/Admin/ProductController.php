@@ -94,7 +94,6 @@ class ProductController extends Controller
         ], 201);
     }
 
-    // PUT /api/admin/products/{id}
     public function update(Request $request, int $id): JsonResponse
     {
         $product = Product::findOrFail($id);
@@ -128,7 +127,6 @@ class ProductController extends Controller
         ]);
     }
 
-    // DELETE /api/admin/products/{id}
     public function destroy(int $id): JsonResponse
     {
         $product = Product::findOrFail($id);

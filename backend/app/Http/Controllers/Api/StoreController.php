@@ -10,32 +10,25 @@ use Illuminate\Http\Request;
 
 class StoreController extends Controller
 {
-    // -------------------------------------------------------
-    // GET ALL ACTIVE STORES
-    // GET /api/stores
-    // -------------------------------------------------------
+
     public function index(Request $request): JsonResponse
     {
         $query = Store::active()->ordered();
 
-        // Filter by city
         if ($request->filled('city')) {
             $query->byCity($request->city);
         }
 
-        // Filter by state
         if ($request->filled('state')) {
             $query->byState($request->state);
         }
 
-        // Filter by type
         if ($request->filled('type')) {
             $query->where('type', $request->type);
         }
 
         $stores = $query->get();
 
-        // If coordinates provided — sort by distance
         if ($request->filled('lat') && $request->filled('lng')) {
             $lat = (float) $request->lat;
             $lng = (float) $request->lng;
@@ -52,10 +45,6 @@ class StoreController extends Controller
         ]);
     }
 
-    // -------------------------------------------------------
-    // GET SINGLE STORE
-    // GET /api/stores/{id}
-    // -------------------------------------------------------
     public function show(int $id): JsonResponse
     {
         $store = Store::active()->findOrFail($id);
@@ -66,10 +55,6 @@ class StoreController extends Controller
         ]);
     }
 
-    // -------------------------------------------------------
-    // SEARCH STORES
-    // GET /api/stores/search
-    // -------------------------------------------------------
     public function search(Request $request): JsonResponse
     {
         $request->validate([
@@ -95,10 +80,7 @@ class StoreController extends Controller
         ]);
     }
 
-    // -------------------------------------------------------
-    // GET ALL CITIES THAT HAVE STORES
-    // GET /api/stores/cities
-    // -------------------------------------------------------
+
     public function cities(): JsonResponse
     {
         $cities = Store::active()
@@ -112,10 +94,7 @@ class StoreController extends Controller
         ]);
     }
 
-    // -------------------------------------------------------
-    // GET ALL STATES THAT HAVE STORES
-    // GET /api/stores/states
-    // -------------------------------------------------------
+ 
     public function states(): JsonResponse
     {
         $states = Store::active()

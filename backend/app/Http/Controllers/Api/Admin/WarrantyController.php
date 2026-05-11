@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 class WarrantyController extends Controller
 {
-    // GET /api/admin/warranties
     public function index(Request $request): JsonResponse
     {
         $query = Warranty::with(['user', 'product'])->latest();
@@ -38,7 +37,6 @@ class WarrantyController extends Controller
         ]);
     }
 
-    // PATCH /api/admin/warranties/{id}
     public function update(Request $request, int $id): JsonResponse
     {
         $warranty = Warranty::findOrFail($id);

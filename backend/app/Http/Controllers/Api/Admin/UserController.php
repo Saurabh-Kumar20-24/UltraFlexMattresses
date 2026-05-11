@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    // GET /api/admin/users
+
     public function index(Request $request): JsonResponse
     {
         $query = User::latest();
@@ -37,7 +37,6 @@ class UserController extends Controller
         ]);
     }
 
-    // PATCH /api/admin/users/{id}
     public function update(Request $request, int $id): JsonResponse
     {
         $user = User::findOrFail($id);
@@ -46,7 +45,6 @@ class UserController extends Controller
             'role' => 'required|in:customer,admin',
         ]);
 
-        // Prevent admin from demoting themselves
         if ($user->id === $request->user()->id) {
             return response()->json([
                 'success' => false,

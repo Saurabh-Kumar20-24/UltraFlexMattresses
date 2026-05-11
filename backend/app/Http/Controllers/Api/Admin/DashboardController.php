@@ -14,13 +14,11 @@ class DashboardController extends Controller
 {
     public function index(): JsonResponse
     {
-        // Overview counts
         $totalOrders    = Order::count();
         $totalUsers     = User::where('role', 'customer')->count();
         $totalProducts  = Product::count();
         $totalWarranties = Warranty::count();
 
-        // Revenue
         $totalRevenue   = Order::where('payment_status', 'paid')
                                ->sum('total_amount');
 
@@ -33,12 +31,10 @@ class DashboardController extends Controller
                                ->whereYear('created_at', now()->year)
                                ->sum('total_amount');
 
-        // Order status breakdown
         $ordersByStatus = Order::selectRaw('status, count(*) as count')
                                ->groupBy('status')
                                ->pluck('count', 'status');
 
-        // Recent orders
         $recentOrders   = Order::with('user')
                                ->latest()
                                ->take(5)
@@ -51,7 +47,6 @@ class DashboardController extends Controller
                                    'date'         => $order->created_at->toDateString(),
                                ]);
 
-        // Recent users
         $recentUsers    = User::where('role', 'customer')
                               ->latest()
                               ->take(5)
@@ -62,7 +57,6 @@ class DashboardController extends Controller
                                   'created_at' => $user->created_at->toDateString(),
                               ]);
 
-        // Low stock variants
         $lowStock       = \App\Models\ProductVariant::with('product')
                                ->where('stock', '<=', 5)
                                ->where('is_active', true)

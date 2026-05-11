@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    // GET /api/admin/orders
     public function index(Request $request): JsonResponse
     {
         $query = Order::with(['user', 'items'])->latest();
@@ -51,7 +50,6 @@ class OrderController extends Controller
         ]);
     }
 
-    // PATCH /api/admin/orders/{id}
     public function update(Request $request, int $id): JsonResponse
     {
         $order = Order::findOrFail($id);
@@ -72,7 +70,6 @@ class OrderController extends Controller
             'admin_notes',
         ]);
 
-        // Set timestamps based on status
         if ($request->status === 'shipped') {
             $data['shipped_at'] = now();
         }
